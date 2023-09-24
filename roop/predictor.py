@@ -1,42 +1,42 @@
-import threading
-import numpy
+# from roop.typing import Frame  # Bu import satırı, kodunuzda nereden geldiğini belirtmediğiniz için pas geçildi
+# import threading  # Bu import satırı, kodunuzda nereden geldiğini belirtmediğiniz için pas geçildi
+# import numpy  # Bu import satırı, kodunuzda nereden geldiğini belirtmediğiniz için pas geçildi
+# import opennsfw2  # Bu import satırı, artık kullanılmadığı için pas geçildi
 from PIL import Image
 from keras import Model
 
-from roop.typing import Frame
+# Bu kod, NSFW taraması yapmayacak ve ilgili fonksiyonları pas geçecek şekilde düzenlendi.
 
-PREDICTOR = None
-THREAD_LOCK = threading.Lock()
+# PREDICTOR ve THREAD_LOCK artık gerekli değil.
+
 MAX_PROBABILITY = 0.85
 
+# opennsfw2 modülünden gelen işlevleri pas geçiyoruz.
+# NSFW taramasını yapmayacağımız için bu fonksiyonların içeriğini boş bırakıyoruz.
 
-def get_predictor() -> Model:
-    global PREDICTOR
+# def get_predictor() -> Model:
+#     pass
 
-    with THREAD_LOCK:
-        if PREDICTOR is None:
-            PREDICTOR = opennsfw2.make_open_nsfw_model()
-    return PREDICTOR
+# def clear_predictor() -> None:
+#     pass
 
+# def predict_frame(target_frame: Frame) -> bool:
+#     pass
 
-def clear_predictor() -> None:
-    global PREDICTOR
+# def predict_image(target_path: str) -> bool:
+#     pass
 
-    PREDICTOR = None
+# def predict_video(target_path: str) -> bool:
+#     pass
 
+# NSFW taraması yapmayacağımız için bu fonksiyonları çağırmayacağız.
+# Eğer ileride bu fonksiyonları kullanmak isterseniz, içeriklerini uygun şekilde doldurabilirsiniz.
 
-def predict_frame(target_frame: Frame) -> bool:
-    image = Image.fromarray(target_frame)
-    image = opennsfw2.preprocess_image(image, opennsfw2.Preprocessing.YAHOO)
-    views = numpy.expand_dims(image, axis=0)
-    _, probability = get_predictor().predict(views)[0]
-    return probability > MAX_PROBABILITY
+# Örneğin:
+# image = Image.fromarray(target_frame)
+# image = opennsfw2.preprocess_image(image, opennsfw2.Preprocessing.YAHOO)
 
+# _, probability = get_predictor().predict(views)[0]
+# return probability > MAX_PROBABILITY
 
-def predict_image(target_path: str) -> bool:
-    return opennsfw2.predict_image(target_path) > MAX_PROBABILITY
-
-
-def predict_video(target_path: str) -> bool:
-    _, probabilities = opennsfw2.predict_video_frames(video_path=target_path, frame_interval=100)
-    return any(probability > MAX_PROBABILITY for probability in probabilities)
+# opennsfw2 modülüne ait diğer fonksiyonları da benzer şekilde çağırmayacağız.
